@@ -1,26 +1,26 @@
 package models;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Reservation {
-    private LocalDateTime reservationDate;
+    private int id;
+    private LocalDateTime reservationDateStart;
     private LocalDateTime reservationDateEnd;
     private Table table;
+    private Guest guest;
     private int numberOfPersons;
 
-    public Reservation(LocalDateTime reservationDate, int numberOfPersons) {
-        this.reservationDate = reservationDate;
+    public Reservation(int id, LocalDateTime reservationDate, int numberOfPersons, Table table, Guest guest) {
+        this.id = id;
+        this.reservationDateStart = reservationDate;
         this.reservationDateEnd = reservationDate.plusHours(2);
         this.numberOfPersons = numberOfPersons;
-        if(table.getCapacity() >= numberOfPersons & table.isAvailable()) {
-
-        }
-
+        this.table = table;
+        this.guest = guest;
     }
 
-    public LocalDateTime getReservationDate() {
-        return reservationDate;
+    public LocalDateTime getReservationDateStart() {
+        return reservationDateStart;
     }
 
     public Table getTables() {
@@ -29,5 +29,13 @@ public class Reservation {
 
     public int getNumberOfPersons() {
         return numberOfPersons;
+    }
+
+    public LocalDateTime getReservationDateEnd() {
+        return reservationDateEnd;
+    }
+
+    public Guest getGuest() {
+        return guest;
     }
 }

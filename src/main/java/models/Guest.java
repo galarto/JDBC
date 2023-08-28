@@ -1,11 +1,13 @@
 package models;
 
 public class Guest {
+    private int id;
    private String name;
    private String surname;
    private String phoneNumber;
 
-    public Guest(String name, String surname, String phoneNumber) {
+    public Guest(int id, String name, String surname, String phoneNumber) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;

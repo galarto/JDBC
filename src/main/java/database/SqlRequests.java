@@ -34,8 +34,9 @@ public class SqlRequests {
 
     public static final String ADD_RESERVATION =
             "INSERT INTO " +
-                    "RESERVATIONS(ID, TABLE_ID, GUEST_ID, RESERVATION_DATE_START, RESERVATION_DATE_END)\r?\n" +
-                    "VALUES(?,?,?,?,?)";
+                    "RESERVATIONS(ID, TABLE_ID, GUEST_ID, NUMBER_OF_PERSONS, " +
+                                 "RESERVATION_DATE_START, RESERVATION_DATE_END)\r?\n" +
+                                 "VALUES(?,?,?,?,?,?)";
 
     public static final String ADD_TABLE =
             "INSERT INTO " +

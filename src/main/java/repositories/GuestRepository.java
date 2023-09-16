@@ -28,7 +28,7 @@ public class GuestRepository {
 
     public Guest getGuest(int id) {
         try(Connection connection = DataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("select * from guest where id = ?")) {
+            PreparedStatement statement = connection.prepareStatement("select * from guests where id = ?")) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -38,8 +38,32 @@ public class GuestRepository {
                                  resultSet.getString("phone_number"));
             }
         } catch (SQLException e) {
-            System.out.println("Logger add(Guest guest)");
+            System.out.println("Logger getGuest(Guest guest)");
         }
         return null;
     }
+
+    public void updateGuest(Guest guest) {
+        try(Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("update guests set(name = ?, surname = ?," +
+                "phone_number = ?) where id = ?")) {
+            statement.setString(1, guest.getName());
+            statement.setString(2, guest.getSurname());
+            statement.setString(3, guest.getPhoneNumber());
+            statement.setInt(4, guest.getId());
+        } catch (SQLException e) {
+            System.out.println("Logger updateGuest(Guest guest)");
+        }
+    }
+
+    public void deleteGuest(Guest guest) {
+        try(Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("delete from guests where id = ?")) {
+            statement.setInt(1, guest.getId());
+        } catch (SQLException e) {
+            System.out.println("Logger deleteGuest(Guest guest)");
+        }
+    }
+
+
 }

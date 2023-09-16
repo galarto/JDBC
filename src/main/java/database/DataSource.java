@@ -10,7 +10,7 @@ import static database.SqlRequests.*;
 
 public class DataSource {
     private final static Logger LOGGER = Logger.getLogger(String.valueOf(DataSource.class));
-    private final static String URL = "jdbc:postgresql://localhost5432/postgres";
+    private final static String URL = "jdbc:postgresql://localhost:5432/postgres";
     private final static String USERNAME = "postgres";
     private final static String PASSWORD = "09031999";
 

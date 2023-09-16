@@ -13,6 +13,10 @@ public class Table {
         this.number = number;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getCapacity() {
         return capacity;
     }

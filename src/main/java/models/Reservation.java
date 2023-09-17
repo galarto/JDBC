@@ -23,7 +23,7 @@ public class Reservation {
         return reservationDateStart;
     }
 
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

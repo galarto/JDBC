@@ -26,10 +26,10 @@ public class GuestRepository {
         }
     }
 
-    public Guest getGuest(int id) {
+    public Guest getGuest(String phoneNumber) {
         try(Connection connection = DataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("select * from guests where id = ?")) {
-            statement.setInt(1, id);
+            PreparedStatement statement = connection.prepareStatement("select * from guests where phone_number = ?")) {
+            statement.setString(1, phoneNumber);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return new Guest(resultSet.getInt("id"),
@@ -56,10 +56,10 @@ public class GuestRepository {
         }
     }
 
-    public void deleteGuest(Guest guest) {
+    public void deleteGuest(String phoneNumber) {
         try(Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("delete from guests where id = ?")) {
-            statement.setInt(1, guest.getId());
+        PreparedStatement statement = connection.prepareStatement("delete from guests where phone_number = ?")) {
+            statement.setString(1, phoneNumber);
         } catch (SQLException e) {
             System.out.println("Logger deleteGuest(Guest guest)");
         }

@@ -2,9 +2,9 @@ package models;
 
 public class Guest {
     private int id;
-   private String name;
-   private String surname;
-   private String phoneNumber;
+    private String name;
+    private String surname;
+    private String phoneNumber;
 
     public Guest(int id, String name, String surname, String phoneNumber) {
         this.id = id;
@@ -33,6 +33,19 @@ public class Guest {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public void book() {
 
     }

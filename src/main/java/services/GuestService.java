@@ -16,7 +16,18 @@ public class GuestService {
     }
 
     public void updateInfo(String name, String surname, String oldPhoneNumber, String newPhoneNumber) {
-        Guest guest = new Guest(0, name, surname, newPhoneNumber);
+        Guest guest = repository.getGuest(oldPhoneNumber);
+        guest.setName(name);
+        guest.setSurname(surname);
+        guest.setPhoneNumber(newPhoneNumber);
         repository.updateGuest(guest);
+    }
+
+    public void delete(String phoneNumber) {
+        repository.deleteGuest(phoneNumber);
+    }
+
+    public Guest getInfo(String phoneNumber) {
+        return repository.getGuest(phoneNumber);
     }
 }

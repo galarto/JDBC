@@ -28,4 +28,14 @@ public class Table {
     public int getNumber() {
         return number;
     }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "id=" + id +
+                ", capacity=" + capacity +
+                ", isAvailable=" + isAvailable +
+                ", number=" + number +
+                '}';
+    }
 }

@@ -38,4 +38,20 @@ public class Reservation {
     public Guest getGuest() {
         return guest;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", reservationDateStart=" + reservationDateStart +
+                ", reservationDateEnd=" + reservationDateEnd +
+                ", table=" + table +
+                ", guest=" + guest +
+                ", numberOfPersons=" + numberOfPersons +
+                '}';
+    }
 }

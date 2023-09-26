@@ -45,12 +45,14 @@ public class GuestRepository {
 
     public void updateGuest(Guest guest) {
         try(Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("update guests set(name = ?, surname = ?," +
-                "phone_number = ?) where id = ?")) {
+        PreparedStatement statement = connection.prepareStatement("update guests set name = ?, surname = ?, " +
+                "phone_number = ? where id = ?")) {
             statement.setString(1, guest.getName());
             statement.setString(2, guest.getSurname());
             statement.setString(3, guest.getPhoneNumber());
             statement.setInt(4, guest.getId());
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Logger updateGuest(Guest guest)");
         }
@@ -60,6 +62,8 @@ public class GuestRepository {
         try(Connection connection = DataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("delete from guests where phone_number = ?")) {
             statement.setString(1, phoneNumber);
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Logger deleteGuest(Guest guest)");
         }

@@ -46,14 +46,6 @@ public class Guest {
         this.phoneNumber = phoneNumber;
     }
 
-    public void book() {
-
-    }
-
-    public void cancelBooking() {
-
-    }
-
     public void changeNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }

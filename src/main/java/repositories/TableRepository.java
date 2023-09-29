@@ -1,15 +1,13 @@
 package repositories;
 
 import database.DataSource;
+import models.Reservation;
 import models.Table;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
-import static database.SqlRequests.ADD_TABLE;
+import static database.SqlRequests.*;
 
 public class TableRepository {
 
@@ -69,8 +67,43 @@ public class TableRepository {
         }
     }
 
-    public ArrayList<Table> getTables() {
-        return new ArrayList<>();
+    public ArrayList<Table> getFreeTables(String reservationsStart, String reservationEnd) {
+        ArrayList<Table> tables = new ArrayList<>();
+
+        try(Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(FREE_TABLES)) {
+            statement.setTimestamp(1, Timestamp.valueOf(reservationsStart));
+            statement.setTimestamp(2, Timestamp.valueOf(reservationsStart));
+            statement.setTimestamp(3, Timestamp.valueOf(reservationEnd));
+            statement.setTimestamp(4, Timestamp.valueOf(reservationEnd));
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Table table = new Table(resultSet.getInt("id"),
+                        resultSet.getInt("capacity"),
+                        resultSet.getBoolean("is_available"),
+                        resultSet.getInt("number"));
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            System.out.println("Logger getFreeTables(String reservationStart, String reservationEnd)");
+        }
+        return tables;
+    }
+
+    public void updateTableStatus(Reservation reservation) {
+        try(Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(UPDATE_TABLE_STATUS)) {
+
+            statement.setTimestamp(1, Timestamp.valueOf(reservation.getReservationDateStart()));
+            statement.setTimestamp(2, Timestamp.valueOf(reservation.getReservationDateEnd()));
+            statement.setInt(3, reservation.getTable().getId());
+            statement.setInt(4, reservation.getGuest().getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Logger updateTablesStatus(Reservation reservation)");
+        }
     }
 }
 
@@ -87,3 +120,10 @@ public class TableRepository {
 //and reservation_date_end = ?
 //and t.id = ?
 //and g.id = ?
+
+
+//select tables.number from reservations inner join tables on reservations.table_id = tables.id
+//        where (reservations.reservation_date_start <= '2023-09-28 22:00:00'
+//        and reservations.reservation_date_end >= '2023-09-28 22:00:00')
+//        or (reservations.reservation_date_start <= '2023-09-29 00:00:00'
+//        and reservations.reservation_date_end >= '2023-09-29 00:00:00')

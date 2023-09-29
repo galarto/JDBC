@@ -48,4 +48,25 @@ public class SqlRequests {
                     "GUESTS(NAME, SURNAME, PHONE_NUMBER)\r\n" +
                     "VALUES(?,?,?)";
 
+    public static final String FREE_TABLES =
+            "select * from tables\n" +
+                    "where number not in(select tables.number from reservations inner join tables on reservations.table_id = tables.id\n" +
+                    "\t\t\t\t\twhere (reservations.reservation_date_start <= ? \n" +
+                    "\t\t\t\t\t\t\tand reservations.reservation_date_end >= ?)\n" +
+                    "\t\t\t\t\t\t\tor (reservations.reservation_date_start <= ? \n" +
+                    "\t\t\t\t\t\t\tand reservations.reservation_date_end >= ?))";
+
+    public static final String UPDATE_TABLE_STATUS =
+            "update tables\n" +
+                    "set is_available = false\n" +
+                    "from reservations r\n" +
+                    "inner join tables t\n" +
+                    "on r.table_id = t.id\n" +
+                    "inner join guests g\n" +
+                    "on r.guest_id = g.id\n" +
+                    "where reservation_date_start = ?\n" +
+                    "and reservation_date_end = ?\n" +
+                    "and t.id = ?\n" +
+                    "and g.id = ?";
 }
+

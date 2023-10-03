@@ -1,7 +1,6 @@
 package repositories;
 
 import database.DataSource;
-import models.Reservation;
 import models.Table;
 
 import java.sql.*;
@@ -15,8 +14,7 @@ public class TableRepository {
         try(Connection connection = DataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(ADD_TABLE)) {
             statement.setInt(1, table.getCapacity());
-            statement.setBoolean(2, table.isAvailable());
-            statement.setInt(3, table.getNumber());
+            statement.setInt(2, table.getNumber());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -32,7 +30,6 @@ public class TableRepository {
             if(resultSet.next()) {
                 return new Table(resultSet.getInt("id"),
                         resultSet.getInt("capacity"),
-                        resultSet.getBoolean("is_available"),
                         resultSet.getInt("number"));
             }
         } catch (SQLException e) {
@@ -46,9 +43,8 @@ public class TableRepository {
         PreparedStatement statement = connection.prepareStatement("update tables set capacity = ?, " +
                 "is_available = ?, number = ? where id = ?")) {
             statement.setInt(1, table.getCapacity());
-            statement.setBoolean(2, table.isAvailable());
-            statement.setInt(3, table.getNumber());
-            statement.setInt(4, table.getId());
+            statement.setInt(2, table.getNumber());
+            statement.setInt(3, table.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -81,7 +77,6 @@ public class TableRepository {
             while (resultSet.next()) {
                 Table table = new Table(resultSet.getInt("id"),
                         resultSet.getInt("capacity"),
-                        resultSet.getBoolean("is_available"),
                         resultSet.getInt("number"));
                 tables.add(table);
             }
@@ -89,21 +84,6 @@ public class TableRepository {
             System.out.println("Logger getFreeTables(String reservationStart, String reservationEnd)");
         }
         return tables;
-    }
-
-    public void updateTableStatus(Reservation reservation) {
-        try(Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(UPDATE_TABLE_STATUS)) {
-
-            statement.setTimestamp(1, Timestamp.valueOf(reservation.getReservationDateStart()));
-            statement.setTimestamp(2, Timestamp.valueOf(reservation.getReservationDateEnd()));
-            statement.setInt(3, reservation.getTable().getId());
-            statement.setInt(4, reservation.getGuest().getId());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Logger updateTablesStatus(Reservation reservation)");
-        }
     }
 }
 

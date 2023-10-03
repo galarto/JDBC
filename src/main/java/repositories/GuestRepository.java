@@ -22,7 +22,7 @@ public class GuestRepository {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Logger add(Guest guest)");
+            System.out.println("Logger add(Guest guest)1");
         }
     }
 
@@ -60,12 +60,22 @@ public class GuestRepository {
 
     public void deleteGuest(String phoneNumber) {
         try(Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("delete from reservations R using guests L " +
+                "where R.guest_id = L.id and L.phone_number = ?")) {
+            statement.setString(1, phoneNumber);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Logger deleteGuest(1)(String phoneNumber)");
+
+        }
+        try(Connection connection = DataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("delete from guests where phone_number = ?")) {
             statement.setString(1, phoneNumber);
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Logger deleteGuest(Guest guest)");
+            System.out.println("Logger deleteGuest(2)(String phoneNumber)");
         }
     }
 

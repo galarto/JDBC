@@ -41,7 +41,7 @@ public class ReservationRepository {
                         resultSet.getTimestamp("reservation_date_start").toLocalDateTime(),
                         resultSet.getInt("number_of_persons"),
                         new Table(resultSet.getInt("table_id"), resultSet.getInt("capacity"),
-                                resultSet.getBoolean("is_available"), resultSet.getInt("number")),
+                                resultSet.getInt("number")),
                         new Guest(resultSet.getInt("guest_id"), resultSet.getString("name"),
                                 resultSet.getString("surname"), resultSet.getString("phone_number")));
             }

@@ -6,10 +6,9 @@ public class Table {
     private boolean isAvailable;
     private int number;
 
-    public Table(int id, int capacity, boolean isAvailable, int number) {
+    public Table(int id, int capacity, int number) {
         this.id = id;
         this.capacity = capacity;
-        this.isAvailable = isAvailable;
         this.number = number;
     }
 
@@ -21,10 +20,6 @@ public class Table {
         return capacity;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
     public int getNumber() {
         return number;
     }
@@ -34,7 +29,6 @@ public class Table {
         return "Table{" +
                 "id=" + id +
                 ", capacity=" + capacity +
-                ", isAvailable=" + isAvailable +
                 ", number=" + number +
                 '}';
     }

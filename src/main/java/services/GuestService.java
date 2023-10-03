@@ -1,5 +1,6 @@
 package services;
 
+import exceptions.GuestServiceException;
 import models.Guest;
 import models.Reservation;
 import models.Table;
@@ -13,55 +14,62 @@ import java.util.Optional;
 
 
 public class GuestService {
-    private GuestRepository repository;
+    private GuestRepository guestRepository;
     private ReservationRepository reservationRepository;
     private TableRepository tableRepository;
 
     public GuestService(GuestRepository repository, ReservationRepository reservationRepository,
                         TableRepository tableRepository) {
-        this.repository = repository;
+        this.guestRepository = repository;
         this.reservationRepository = reservationRepository;
         this.tableRepository = tableRepository;
     }
 
-    public void signUp(String name, String phoneNumber) {
+    public void signUp(String name, String phoneNumber) throws GuestServiceException {
+        if(((phoneNumber.length() != 12) && !phoneNumber.startsWith("+7")) || !name.matches("[a-zA-Z]+")) {
+            throw new GuestServiceException("Неправильно введен номер телефона или неправильно введено имя");
+        }
         Guest guest = new Guest(name, phoneNumber);
-        repository.add(guest);
+        guestRepository.add(guest);
     }
 
     public void updateInfo(String name, String surname, String oldPhoneNumber, String newPhoneNumber) {
-        Guest guest = repository.getGuest(oldPhoneNumber);
+        Guest guest = guestRepository.getGuest(oldPhoneNumber);
         guest.setName(name);
         guest.setSurname(surname);
         guest.setPhoneNumber(newPhoneNumber);
-        repository.updateGuest(guest);
+        guestRepository.updateGuest(guest);
     }
 
     public void delete(String phoneNumber) {
-        repository.deleteGuest(phoneNumber);
+        guestRepository.deleteGuest(phoneNumber);
     }
 
     public void book(String phoneNumber, String reservationDateStart, String reservationDateEnd,
-                     int numberOfPersons, String name) {
+                     int numberOfPersons, String name) throws GuestServiceException {
         //if(/*ошибка в данных*/){
+        if(((phoneNumber.length() != 12) && !phoneNumber.startsWith("+7")) || !name.matches("[a-zA-Z]+")) {
+            throw new GuestServiceException("Неправильно введен номер телефона или неправильно введено имя");
+        }
         // ошибки нет:
-        signUp(name, phoneNumber);
-        TableRepository tableRepository1 = new TableRepository();
-        Optional<Table> t = tableRepository1.getFreeTables(reservationDateStart, reservationDateEnd).stream().
+        if(guestRepository.getGuest(phoneNumber) == null) {
+            signUp(name, phoneNumber);
+        }
+        Optional<Table> t = tableRepository.getFreeTables(reservationDateStart, reservationDateEnd).stream().
                 filter(table -> table.getCapacity() >= numberOfPersons).findAny();
+        if(t.isEmpty()) {
+            throw new GuestServiceException("Нет свободного столика в данное время");
+        }
         Table table1 = t.get();
-        GuestRepository guestRepository1 = new GuestRepository();
-        Guest guest1 = guestRepository1.getGuest(phoneNumber);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy HH:mm:ss a");
+        Guest guest1 = guestRepository.getGuest(phoneNumber);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.parse(reservationDateStart, formatter);
         Reservation reservation1 = new Reservation(1, localDateTime, numberOfPersons,table1, guest1);
-        ReservationRepository reservationRepository1 = new ReservationRepository();
-        reservationRepository1.add(reservation1);
-        tableRepository1.updateTableStatus(reservation1);
+        reservationRepository.add(reservation1);
         }
 
     public Guest getInfo(String phoneNumber) {
-        return repository.getGuest(phoneNumber);
+        return guestRepository.getGuest(phoneNumber);
     }
 }
 

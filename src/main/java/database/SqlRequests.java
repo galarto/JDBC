@@ -13,7 +13,6 @@ public class SqlRequests {
             "CREATE TABLE IF NOT EXISTS TABLE (" +
             "ID SERIAL PRIMARY KEY," +
             "CAPACITY INT," +
-            "IS_AVAILABLE BOOLEAN," +
             "NUMBER INT);";
 
     public static final String CREATE_GUESTS_TABLE =
@@ -40,7 +39,7 @@ public class SqlRequests {
 
     public static final String ADD_TABLE =
             "INSERT INTO " +
-                    "TABLES(CAPACITY, IS_AVAILABLE, NUMBER)\r\n" +
+                    "TABLES(CAPACITY, NUMBER)\r\n" +
                     "VALUES(?,?,?)";
 
     public static final String ADD_GUEST =
@@ -56,17 +55,5 @@ public class SqlRequests {
                     "\t\t\t\t\t\t\tor (reservations.reservation_date_start <= ? \n" +
                     "\t\t\t\t\t\t\tand reservations.reservation_date_end >= ?))";
 
-    public static final String UPDATE_TABLE_STATUS =
-            "update tables\n" +
-                    "set is_available = false\n" +
-                    "from reservations r\n" +
-                    "inner join tables t\n" +
-                    "on r.table_id = t.id\n" +
-                    "inner join guests g\n" +
-                    "on r.guest_id = g.id\n" +
-                    "where reservation_date_start = ?\n" +
-                    "and reservation_date_end = ?\n" +
-                    "and t.id = ?\n" +
-                    "and g.id = ?";
 }
 
